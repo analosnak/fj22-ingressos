@@ -20,6 +20,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessoes;
 
 @Controller
 public class SessaoController {
@@ -48,9 +49,16 @@ public class SessaoController {
 			return form(sessaoForm.getSalaId());
 		}
 		Sessao sessao = sessaoForm.toSessao(salaDao, filmeDao);
-		sessaoDao.salva(sessao);
+		List<Sessao> sessoes = sessaoDao.findAllBySala(sessao.getSala().getId());
 
-		ModelAndView mav = new ModelAndView("redirect:sala/" + sessao.getSala().getId() + "/sessoes/");
-		return mav;
+		GerenciadorDeSessoes gerenciador = new GerenciadorDeSessoes();
+		if (gerenciador.cabeNaSala(sessao, sessoes)) {
+
+			sessaoDao.salva(sessao);
+
+			ModelAndView mav = new ModelAndView("redirect:sala/" + sessao.getSala().getId() + "/sessoes/");
+			return mav;
+		}
+		return form(sessaoForm.getSalaId());
 	}
 }
