@@ -25,4 +25,10 @@ public class SessaoDao {
 		List<Sessao> sessoes = query.getResultList();
 		return sessoes;
 	}
+
+	public List<Sessao> findAllByFilme(Integer filmeId) {
+		Query query = manager.createQuery("select sessao from Sessao sessao " + "where sessao.filme.id = :idFilme");
+		query.setParameter("idFilme", filmeId);
+		return query.getResultList();
+	}
 }

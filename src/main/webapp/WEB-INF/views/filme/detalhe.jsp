@@ -15,7 +15,7 @@
 <ingresso:template>
     <jsp:body>
 		<div class=" col-md-6 col-md-offset-3">
-	        <h1>${detalhes.titulo}</h1>
+<%-- 	        <h1>${detalhes.titulo}</h1> --%>
 	        <image src="${detalhes.imagem}" />
 	
 	        <div>
@@ -30,22 +30,22 @@
 	
 	        <div>
 	            <label for="escritores">Escritores</label>
-	            <span id="escritores">${detalhes.escritores}</span>
+<%-- 	            <span id="escritores">${detalhes.escritores}</span> --%>
 	        </div>
 	
 	        <div>
 	            <label for="atores">Atores</label>
-	            <span id="atores">${detalhes.atores}</span>
+<%-- 	            <span id="atores">${detalhes.atores}</span> --%>
 	        </div>
 	
 	        <div>
 	            <label for="descricao">Descrição</label>
-	            <span id="descricao">${detalhes.descricao}</span>
+<%-- 	            <span id="descricao">${detalhes.descricao}</span> --%>
 	        </div>
 	
 	        <div>
 	            <label for="avaliacao">Avaliação</label>
-	            <span id="avaliacao">${detalhes.avaliacao}</span>
+<%-- 	            <span id="avaliacao">${detalhes.avaliacao}</span> --%>
 	        </div>
 
 			<%-- <sec:authorize access="hasRole('COMPRADOR')"> --%>
