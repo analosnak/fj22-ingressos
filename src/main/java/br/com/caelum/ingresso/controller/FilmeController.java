@@ -98,7 +98,7 @@ public class FilmeController {
 
 		Filme filme = filmeDao.findOne(id);
 
-		Optional<DetalhesDoFilme> optional = client.fazRequisicao(filme);
+		Optional<DetalhesDoFilme> optional = client.fazRequisicao(filme, DetalhesDoFilme.class);
 
 		modelAndView.addObject("detalhes", optional.orElse(new DetalhesDoFilme()));
 

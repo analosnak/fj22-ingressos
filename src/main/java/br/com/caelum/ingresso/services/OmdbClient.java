@@ -14,12 +14,12 @@ public class OmdbClient {
 
 	private Logger logger = Logger.getLogger(OmdbClient.class);
 
-	public Optional<DetalhesDoFilme> fazRequisicao(Filme filme) {
+	public <T> Optional<T> fazRequisicao(Filme filme, Class<T> tipoDaClasse) {
 		try {
 			RestTemplate cliente = new RestTemplate();
 			String url = "https://omdb-fj22.herokuapp.com/movie?title=" + filme.getNome();
-			DetalhesDoFilme detalhesDoFilme = cliente.getForObject(url, DetalhesDoFilme.class);
-			return Optional.of(detalhesDoFilme);
+			T objeto = cliente.getForObject(url, tipoDaClasse);
+			return Optional.of(objeto);
 		} catch (RestClientException e) {
 			logger.error("erro ao pegar detalhes", e);
 			return Optional.empty();
