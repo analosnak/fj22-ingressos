@@ -13,4 +13,9 @@ public class DescontoIdoso implements Desconto {
 		return precoOriginal.subtract(new BigDecimal("10.0"));
 	}
 
+	@Override
+	public String getDescricao() {
+		return "IDOSO";
+	}
+
 }
