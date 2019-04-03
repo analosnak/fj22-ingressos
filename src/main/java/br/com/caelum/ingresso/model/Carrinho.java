@@ -28,4 +28,8 @@ public class Carrinho {
 		return ingressos.stream().map(Ingresso::getPreco).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
 
+	public boolean isSelecionado(Lugar lugar) {
+		return ingressos.stream().map(Ingresso::getLugar).anyMatch(l -> l.equals(lugar));
+	}
+
 }
