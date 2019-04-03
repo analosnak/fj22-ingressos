@@ -24,6 +24,7 @@
 	<bean id="meuConversor" class="org.springframework.context.support.ConversionServiceFactoryBean">
 		<property name="converters">
 			<set merge="true">
+				<bean class="br.com.caelum.ingresso.conversor.LocalTimeConversor"/>
 				<bean class="br.com.caelum.ingresso.conversor.YearMonthConverter"/>
 			</set>
 		</property>
