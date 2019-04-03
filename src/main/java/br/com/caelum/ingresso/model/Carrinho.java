@@ -32,4 +32,7 @@ public class Carrinho {
 		return ingressos.stream().map(Ingresso::getLugar).anyMatch(l -> l.equals(lugar));
 	}
 
+	public Compra toCompra() {
+		return new Compra(ingressos);
+	}
 }
