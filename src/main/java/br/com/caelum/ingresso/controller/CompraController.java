@@ -63,6 +63,7 @@ public class CompraController {
 			// tira dinheiro (chama outro serviço)
 
 			compraDao.salva(compra);
+			carrinho.limpa();
 
 			// mostra mensagem sucesso
 		}
