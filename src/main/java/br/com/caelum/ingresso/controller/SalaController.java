@@ -1,18 +1,26 @@
 package br.com.caelum.ingresso.controller;
 
-import br.com.caelum.ingresso.dao.SalaDao;
-import br.com.caelum.ingresso.model.Sala;
-import br.com.caelum.ingresso.model.form.SalaForm;
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.Valid;
-import java.util.Optional;
+import br.com.caelum.ingresso.dao.SalaDao;
+import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.Sala;
+import br.com.caelum.ingresso.model.Sessao;
+import br.com.caelum.ingresso.model.form.SalaForm;
 
 /**
  * Created by nando on 03/03/17.
@@ -22,12 +30,13 @@ public class SalaController {
 
     @Autowired
     private SalaDao salaDao;
+    @Autowired
+    private SessaoDao sessaoDao;
 
-
-    @GetMapping({"/admin/sala", "/admin/sala/{id}"})
+    @GetMapping({ "/admin/sala", "/admin/sala/{id}" })
     public ModelAndView form(@PathVariable("id") Optional<Integer> id, SalaForm salaForm) {
         ModelAndView modelAndView = new ModelAndView("sala/sala");
-        if (id.isPresent()){
+        if (id.isPresent()) {
             Sala sala = salaDao.findOne(id.get());
             salaForm = new SalaForm(sala);
         }
@@ -36,12 +45,11 @@ public class SalaController {
         return modelAndView;
     }
 
-
     @PostMapping("/admin/sala")
     @Transactional
     public ModelAndView salva(@Valid SalaForm salaForm, BindingResult result) {
         Sala sala = salaForm.toSala();
-        if (result.hasErrors()){
+        if (result.hasErrors()) {
             return form(Optional.empty(), salaForm);
         }
         System.out.println(sala.getLugares().size());
@@ -50,7 +58,7 @@ public class SalaController {
     }
 
     @GetMapping("/admin/salas")
-    public ModelAndView lista(){
+    public ModelAndView lista() {
         ModelAndView modelAndView = new ModelAndView("sala/lista");
 
         modelAndView.addObject("salas", salaDao.findAll());
@@ -58,14 +66,16 @@ public class SalaController {
         return modelAndView;
     }
 
-
     @GetMapping("/admin/sala/{id}/sessoes")
     public ModelAndView listaSessoes(@PathVariable("id") Integer id) {
 
         Sala sala = salaDao.findOne(id);
 
+        List<Sessao> sessoes = sessaoDao.findAllBySala(sala);
+
         ModelAndView view = new ModelAndView("sessao/lista");
         view.addObject("sala", sala);
+        view.addObject("sessoes", sessoes);
 
         return view;
     }
@@ -81,11 +91,10 @@ public class SalaController {
         return modelAndView;
     }
 
-
     @DeleteMapping("/admin/sala/{id}")
     @ResponseBody
     @Transactional
-    public void delete(@PathVariable("id") Integer id){
+    public void delete(@PathVariable("id") Integer id) {
         salaDao.delete(id);
     }
 }
