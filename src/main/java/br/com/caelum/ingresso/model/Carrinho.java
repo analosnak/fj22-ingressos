@@ -23,4 +23,8 @@ public class Carrinho {
     public BigDecimal getTotal() {
         return ingressos.stream().map(Ingresso::getPreco).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
     }
+
+    public void limpa() {
+        ingressos.clear();
+    }
 }

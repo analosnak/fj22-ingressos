@@ -74,6 +74,11 @@
                 </div>
             </div>
 
+                <div class="col-md-4">
+                    <label for="validade">Validade:</label>
+                    <input id="validade" type="text" name="validade" class="form-control">
+                </div>
+            </div>
 
             <div class="form-group">
                 <div class="col-md-12">
