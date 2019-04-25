@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,6 +28,11 @@ public class CompraController {
         List<Ingresso> ingressos = carrinhoForm.pegaIngressos(sessaoDao, lugarDao);
         carrinho.adiciona(ingressos);
 
+        return formPagamento();
+    }
+
+    @GetMapping("compra")
+    public ModelAndView formPagamento() {
         ModelAndView modelAndView = new ModelAndView("compra/pagamento");
         modelAndView.addObject("carrinho", carrinho);
 
