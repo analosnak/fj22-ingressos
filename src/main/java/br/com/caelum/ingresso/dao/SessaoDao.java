@@ -38,4 +38,9 @@ public class SessaoDao {
         return sessoes;
     }
 
+    public Sessao findOne(Integer id) {
+        Sessao sessao = manager.find(Sessao.class, id);
+        return sessao;
+    }
+
 }
