@@ -1,7 +1,6 @@
 package br.com.caelum.ingresso.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -77,11 +76,12 @@ public class SessaoController {
     public ModelAndView lugares(@PathVariable("id") Integer id) {
         Sessao sessao = sessaoDao.findOne(id);
 
-        Optional<ImagemDoFilme> optional = client.fazRequisicao(sessao.getFilme(), ImagemDoFilme.class);
+        // Optional<ImagemDoFilme> optional =
+        // client.fazRequisicao(sessao.getFilme(), ImagemDoFilme.class);
 
         ModelAndView modelAndView = new ModelAndView("sessao/lugares");
         modelAndView.addObject("sessao", sessao);
-        modelAndView.addObject("imagemCapa", optional.orElse(new ImagemDoFilme()));
+        modelAndView.addObject("imagemCapa", new ImagemDoFilme());
 
         modelAndView.addObject("tiposDeIngressos", TipoDeIngresso.values());
 
