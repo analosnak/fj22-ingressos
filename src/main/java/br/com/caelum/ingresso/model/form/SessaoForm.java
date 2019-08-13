@@ -2,6 +2,12 @@ package br.com.caelum.ingresso.model.form;
 
 import java.time.LocalTime;
 
+import br.com.caelum.ingresso.dao.FilmeDao;
+import br.com.caelum.ingresso.dao.SalaDao;
+import br.com.caelum.ingresso.model.Filme;
+import br.com.caelum.ingresso.model.Sala;
+import br.com.caelum.ingresso.model.Sessao;
+
 public class SessaoForm {
 	private Integer salaId;
 	private LocalTime horario;
@@ -25,6 +31,19 @@ public class SessaoForm {
 	}
 	public void setFilmeId(Integer filmeId) {
 		this.filmeId = filmeId;
+	}
+	
+	public Sessao toSessao(SalaDao salaDao, FilmeDao filmeDao) {
+		LocalTime horario = this.getHorario();
+		
+		Integer salaId = this.getSalaId();
+		Sala sala = salaDao.findOne(salaId);
+		
+		Integer filmeId = this.getFilmeId();
+		Filme filme = filmeDao.findOne(filmeId);
+		
+		Sessao sessao = new Sessao(horario, sala, filme);
+		return sessao;
 	}
 	
 }

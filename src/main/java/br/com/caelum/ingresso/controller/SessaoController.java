@@ -1,6 +1,5 @@
 package br.com.caelum.ingresso.controller;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,28 +41,11 @@ public class SessaoController {
 		return modelAndView;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	@PostMapping("admin/sessao")
 	@Transactional
 	public ModelAndView salva(SessaoForm sessaoForm) {
 		
-		LocalTime horario = sessaoForm.getHorario();
-		
-		Integer salaId = sessaoForm.getSalaId();
-		Sala sala = salaDao.findOne(salaId);
-		
-		Integer filmeId = sessaoForm.getFilmeId();
-		Filme filme = filmeDao.findOne(filmeId);
-		
-		Sessao sessao = new Sessao(horario, sala, filme);
+		Sessao sessao = sessaoForm.toSessao(salaDao, filmeDao);
 		
 		sessaoDao.save(sessao);
 		
