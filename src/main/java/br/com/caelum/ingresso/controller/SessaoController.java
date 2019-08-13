@@ -20,6 +20,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessao;
 
 @Controller
 public class SessaoController {
@@ -48,12 +49,18 @@ public class SessaoController {
 	@PostMapping("admin/sessao")
 	@Transactional
 	public ModelAndView salva(@Valid SessaoForm sessaoForm, BindingResult result) {
-		
 		if (result.hasErrors()) {
 			return form(sessaoForm.getSalaId(), sessaoForm);
 		}
 		
 		Sessao sessao = sessaoForm.toSessao(salaDao, filmeDao);
+		
+		List<Sessao> sessoesDaSala = sessaoDao.listaSessoesDaSala(sessao.getSala());
+		
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao(sessoesDaSala);
+		if (!gerenciador.cabe(sessao)) {
+			return form(sessaoForm.getSalaId(), sessaoForm);
+		}
 		
 		sessaoDao.save(sessao);
 		
