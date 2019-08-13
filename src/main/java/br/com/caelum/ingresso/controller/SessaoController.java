@@ -49,7 +49,7 @@ public class SessaoController {
 		
 		sessaoDao.save(sessao);
 		
-		ModelAndView modelAndView = new ModelAndView("redirect:/admin/sala/1/sessoes/");
+		ModelAndView modelAndView = new ModelAndView("redirect:/admin/sala/"+ sessaoForm.getSalaId() +"/sessoes/");
 		
 		return modelAndView; 
 	}
