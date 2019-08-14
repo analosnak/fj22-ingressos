@@ -8,6 +8,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
+import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 
@@ -28,4 +29,16 @@ public class SessaoDao {
 		List<Sessao> sessoes = query.getResultList();
 		return sessoes;
 	}
+	
+	public List<Sessao> listaSessoesDoFilme(Filme filme) {
+		String sql = "select s from Sessao s where s.filme = :filme";
+		Query query = manager.createQuery(sql);
+		query.setParameter("filme", filme);
+		return query.getResultList();
+	}
 }
+
+
+
+
+
