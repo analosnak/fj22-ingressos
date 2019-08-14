@@ -23,15 +23,6 @@ public class GerenciadorDeSessao {
 		return sessoesDaSala.stream().noneMatch(sessaoExist -> temConflito(sessaoNova, sessaoExist));
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	private boolean terminaNoDiaSeguinte(Sessao sessao) {
 		LocalDate hoje = LocalDate.now();
