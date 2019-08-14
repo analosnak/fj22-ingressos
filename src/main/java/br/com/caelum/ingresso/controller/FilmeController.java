@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.DetalhesDoFilme;
 import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sessao;
 
@@ -101,8 +103,13 @@ public class FilmeController {
     	Filme filme = filmeDao.findOne(filmeId);
     	
     	List<Sessao> sessoes = sessaoDao.listaSessoesDoFilme(filme);
-    	
     	modelAndView.addObject("sessoes", sessoes);
+    	
+    	RestTemplate restTemplate = new RestTemplate();
+    	String url = "https://omdb-fj22.herokuapp.com/movie?title=avengers";
+		DetalhesDoFilme detalhesDoFilme = restTemplate.getForObject(url, DetalhesDoFilme.class);
+    	
+    	modelAndView.addObject("detalhes", detalhesDoFilme);
     	
     	return modelAndView;
     }
