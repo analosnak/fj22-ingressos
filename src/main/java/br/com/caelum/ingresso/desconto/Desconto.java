@@ -6,4 +6,5 @@ public interface Desconto {
 
 	public BigDecimal aplicaDesconto(BigDecimal preco);
 
+	public String getDescricao();
 }

@@ -22,6 +22,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.ImagemDoFilme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
+import br.com.caelum.ingresso.model.TipoDeIngresso;
 import br.com.caelum.ingresso.model.form.SessaoForm;
 import br.com.caelum.ingresso.validacao.GerenciadorDeSessao;
 import br.com.caelum.ingresso.webservice.OmdbClient;
@@ -85,6 +86,8 @@ public class SessaoController {
 		Optional<ImagemDoFilme> optional =
 				omdbClient.fazRequisicao(sessao.getFilme(), ImagemDoFilme.class);
 		modelAndView.addObject("imagemCapa", optional.orElse(new ImagemDoFilme()));
+		
+		modelAndView.addObject("tiposDeIngressos", TipoDeIngresso.values());
 		
 		return modelAndView;
 	}
