@@ -36,6 +36,10 @@ public class SessaoDao {
 		query.setParameter("filme", filme);
 		return query.getResultList();
 	}
+	
+	public Sessao findOne(Integer id) {
+		return manager.find(Sessao.class, id);
+	}
 }
 
 

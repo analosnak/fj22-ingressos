@@ -103,7 +103,7 @@ public class FilmeController {
 		List<Sessao> sessoes = sessaoDao.listaSessoesDoFilme(filme);
 		modelAndView.addObject("sessoes", sessoes);
 
-		Optional<DetalhesDoFilme> optional = omdbClient.fazRequisicao(filme);
+		Optional<DetalhesDoFilme> optional = omdbClient.fazRequisicao(filme, DetalhesDoFilme.class);
 
 		modelAndView.addObject("detalhes", optional.orElse(new DetalhesDoFilme()));
 
