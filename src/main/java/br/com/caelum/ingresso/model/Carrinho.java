@@ -11,24 +11,29 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class Carrinho {
 	private List<Ingresso> ingressos = new ArrayList<>();
-	
+
 	public void adiciona(Ingresso ingresso) {
 		ingressos.add(ingresso);
 	}
-	
+
 	public BigDecimal getTotal() {
-		return ingressos.stream()
-				.map(Ingresso::getPreco)
-				.reduce(BigDecimal::add)
-				.orElse(BigDecimal.ZERO);
+		return ingressos.stream().map(Ingresso::getPreco).reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 	}
-	
+
 	public boolean isSelecionado(Lugar lugar) {
 		return ingressos.stream().map(Ingresso::getLugar).anyMatch(lugarDoIngresso -> lugarDoIngresso.equals(lugar));
 	}
 
+	public Compra toCompra() {
+		return new Compra(ingressos);
+	}
+
 	public List<Ingresso> getIngressos() {
 		return ingressos;
+	}
+
+	public void limpa() {
+		this.ingressos.clear();
 	}
 
 	public void setIngressos(List<Ingresso> ingressos) {
