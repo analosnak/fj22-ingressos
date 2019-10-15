@@ -20,6 +20,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessao;
 
 @Controller
 public class SessaoController {
@@ -30,6 +31,8 @@ public class SessaoController {
 	private SalaDao salaDao;
 	@Autowired
 	private SessaoDao sessaoDao;
+	@Autowired
+	private GerenciadorDeSessao gerenciador;
 	
 	@GetMapping("admin/sessao")
 	public ModelAndView formulario(
@@ -58,6 +61,11 @@ public class SessaoController {
 		Sessao sessao = 
 				sessaoForm.criaSessao(salaDao, filmeDao);
 		
+		List<Sessao> sessoes = sessaoDao.findAllBySala(sessaoForm.getSalaId());
+		
+		if (!gerenciador.cabe(sessao, sessoes)) {
+			return formulario(sessaoForm.getSalaId(), sessaoForm);
+		}
 		sessaoDao.salva(sessao);
 		
 		return new ModelAndView("redirect:/admin/sala/"+
