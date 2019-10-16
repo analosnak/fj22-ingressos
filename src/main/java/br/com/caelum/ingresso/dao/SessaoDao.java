@@ -26,4 +26,12 @@ public class SessaoDao {
 		query.setParameter("paramSala", salaId);
 		return query.getResultList();
 	}
+
+	public List<Sessao> findAllByFilme(Integer filmeId) {
+		Query query = 
+				manager.createQuery("select s "
+			+ "from Sessao s where s.filme.id = :paramFilme");
+		query.setParameter("paramFilme", filmeId);
+		return query.getResultList();
+	}
 }
