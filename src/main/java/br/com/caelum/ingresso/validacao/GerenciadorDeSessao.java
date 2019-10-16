@@ -28,12 +28,12 @@ public class GerenciadorDeSessao {
 	
 	
 	private boolean terminaNoDiaSeguinte(Sessao sessaoNova) {
-		LocalTime horarioTermino = calculaTerminoSessao(sessaoNova);
 		LocalDate hoje = LocalDate.now();
-		LocalDateTime horarioTerminoDoDia = horarioTermino.atDate(hoje);
+		LocalDateTime horarioTermino = sessaoNova.getHorario().atDate(hoje).plus(
+				sessaoNova.getFilme().getDuracao());
 		LocalDateTime ultimoInstanteDoDia = LocalDateTime.of(hoje, LocalTime.MAX);
 		
-		if (horarioTerminoDoDia.isAfter(ultimoInstanteDoDia)) {
+		if (horarioTermino.isAfter(ultimoInstanteDoDia)) {
 			return true;
 		}
 		return false;

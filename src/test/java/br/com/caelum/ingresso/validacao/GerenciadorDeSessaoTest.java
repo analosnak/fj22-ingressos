@@ -21,13 +21,71 @@ public class GerenciadorDeSessaoTest {
 	private LocalTime horario;
 	private Sessao sessaoNova;
 	
+	private Filme rogueOne;
+	private Sala sala3D;
+	private Sessao sessaoDasDez;
+	private Sessao sessaoDasTreze;
+	private Sessao sessaoDasDezoito;
+
 	@Before
-	public void preparaCenario() {
+	public void preparaSessoes(){
+
 		sala = new Sala("Sala 1");
 		filme = new Filme("Filme 1", Duration.ofMinutes(120), "SCI-FI");
 		horario = LocalTime.parse("10:00:00");
 		sessaoNova = new Sessao(sala, filme, horario);
+		
+		this.rogueOne = new Filme("Rogue One", Duration.ofMinutes(120), "SCI-FI");
+		this.sala3D = new Sala("Sala 3D");
+
+		this.sessaoDasDez = new Sessao(sala3D, rogueOne, LocalTime.parse("10:00:00"));
+		this.sessaoDasTreze = new Sessao(sala3D, rogueOne, LocalTime.parse("13:00:00"));
+		this.sessaoDasDezoito = new Sessao(sala3D, rogueOne, LocalTime.parse("18:00:00"));
 	}
+
+	@Test
+	public void garanteQueNaoDevePermitirSessaoNoMesmoHorario() {
+
+		List<Sessao> sessoes = Arrays.asList(sessaoDasDez);
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao();
+		Assert.assertFalse(gerenciador.cabe(sessaoDasDez, sessoes));
+	}
+
+	@Test
+	public void garanteQueNaoDevePermitirSessoesTerminandoDentroDoHorarioDeUmaSessaoJaExistente() {
+		List<Sessao> sessoes = Arrays.asList(sessaoDasDez);
+		Sessao sessao = new Sessao(sala3D, rogueOne, sessaoDasDez.getHorario().minusHours(1));
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao();
+		Assert.assertFalse(gerenciador.cabe(sessao, sessoes));
+
+	}
+
+	@Test
+	public void garanteQueNaoDevePermitirSessoesIniciandoDentroDoHorarioDeUmaSessaoJaExistente() {
+		List<Sessao> sessoesDaSala = Arrays.asList(sessaoDasDez);
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao();
+		Sessao sessao = new Sessao(sala3D, rogueOne, sessaoDasDez.getHorario().plusHours(1));
+		Assert.assertFalse(gerenciador.cabe(sessao, sessoesDaSala));
+
+	}
+
+	@Test
+	public void garanteQueDevePermitirUmaInsercaoEntreDoisFilmes(){
+		List<Sessao> sessoes = Arrays.asList(sessaoDasDez, sessaoDasDezoito);
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao();
+		Assert.assertTrue(gerenciador.cabe(sessaoDasTreze, sessoes));
+
+	}
+
+	@Test
+	public void garanteQueDeveNaoPermitirUmaSessaoQueTerminaNoProximoDia() {
+		List<Sessao> sessoes = Collections.emptyList();
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao();
+		Sessao sessaoQueTerminaAmanha = new Sessao(sala3D,  rogueOne, LocalTime.parse("23:00:00"));
+		Assert.assertFalse(gerenciador.cabe(sessaoQueTerminaAmanha, sessoes));
+
+	}
+
 	
 	@Test
 	public void deveCaberSeListaEstiverVazia() {
