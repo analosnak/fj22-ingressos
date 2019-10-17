@@ -98,7 +98,7 @@ public class FilmeController {
     	
     	Filme filme = filmeDao.findOne(filmeId);
     	OmdbClient omdbClient = new OmdbClient();
-		Optional<DetalhesDoFilme> optional = omdbClient.fazRequisicao(filme);	
+		Optional<DetalhesDoFilme> optional = omdbClient.fazRequisicao(filme, DetalhesDoFilme.class);	
     	DetalhesDoFilme padrao = new DetalhesDoFilme();
     	padrao.setAno("1990");
     	padrao.setTitulo("Sem Filme");

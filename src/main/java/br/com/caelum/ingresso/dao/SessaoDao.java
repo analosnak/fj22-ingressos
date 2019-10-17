@@ -34,4 +34,9 @@ public class SessaoDao {
 		query.setParameter("paramFilme", filmeId);
 		return query.getResultList();
 	}
+
+	public Sessao findOne(Integer id) {
+		Sessao sessao = manager.find(Sessao.class, id);
+		return sessao;
+	}
 }
