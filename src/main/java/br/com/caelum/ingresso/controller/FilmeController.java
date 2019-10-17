@@ -1,11 +1,14 @@
 package br.com.caelum.ingresso.controller;
 
+import br.com.caelum.ingresso.client.OmdbClient;
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.DetalhesDoFilme;
 import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sessao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.OpInc;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
@@ -92,6 +95,19 @@ public class FilmeController {
     @GetMapping("/filme/{id}/detalhe")
     public ModelAndView detalhes(@PathVariable("id") Integer filmeId) {
     	ModelAndView modelAndView = new ModelAndView("filme/detalhe");
+    	
+    	Filme filme = filmeDao.findOne(filmeId);
+    	OmdbClient omdbClient = new OmdbClient();
+		Optional<DetalhesDoFilme> optional = omdbClient.fazRequisicao(filme);	
+    	DetalhesDoFilme padrao = new DetalhesDoFilme();
+    	padrao.setAno("1990");
+    	padrao.setTitulo("Sem Filme");
+		DetalhesDoFilme detalhesDoFilme = optional.orElse(padrao);
+		
+		if (!optional.isPresent()) {
+			//mostra página de erro
+		}
+		modelAndView.addObject("detalhes", detalhesDoFilme);
     	
     	List<Sessao> sessoes = sessaoDao.findAllByFilme(filmeId);
     	modelAndView.addObject("sessoes", sessoes);
