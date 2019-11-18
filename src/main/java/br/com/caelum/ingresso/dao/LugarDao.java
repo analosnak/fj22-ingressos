@@ -18,4 +18,8 @@ public class LugarDao {
     public void save(Lugar lugar) {
         manager.persist(lugar);
     }
+
+	public Lugar findOne(Integer lugarId) {
+		return manager.find(Lugar.class, lugarId);
+	}
 }
