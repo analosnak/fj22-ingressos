@@ -1,6 +1,5 @@
 package br.com.caelum.ingresso.controller;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -21,6 +20,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validacoes.GerenciadorDeSessao;
 
 @Controller
 public class SessaoController {
@@ -58,6 +58,14 @@ public class SessaoController {
 				
 		// preencher a sessao
 		Sessao sessao = sessaoForm.toSessao(salaDao, filmeDao);
+		
+		// validar horario da sessao
+		List<Sessao> sessoesDaSala = sessaoDao.buscaSessoesDaSala(sessao.getSala());
+		
+		GerenciadorDeSessao gds = new GerenciadorDeSessao();
+		if (! gds.cabe(sessao, sessoesDaSala)) {
+			return form(sessaoForm.getSalaId(), new SessaoForm());
+		}
 		
 		// chamar sessaoDao pra salvar sessao no BD
 		sessaoDao.salva(sessao);
