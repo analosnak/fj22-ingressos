@@ -32,7 +32,7 @@ public class Sessao {
 		this.sala = sala;
 		this.filme = filme;
 		this.horario = horario;
-		this.setPreco(sala.getPreco().add(filme.getPreco()));
+		this.preco = sala.getPreco().add(sala.getPreco());
 	}
 	
 	public Integer getId() {
