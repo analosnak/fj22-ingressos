@@ -1,10 +1,21 @@
 package br.com.caelum.ingresso.model;
 
-import javax.persistence.*;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.math.RoundingMode;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Created by nando on 03/03/17.
@@ -77,7 +88,7 @@ public class Sala {
     }
 
 	public BigDecimal getPreco() {
-		return preco;
+		return preco.setScale(2, RoundingMode.HALF_UP);
 	}
 
 	public void setPreco(BigDecimal preco) {
