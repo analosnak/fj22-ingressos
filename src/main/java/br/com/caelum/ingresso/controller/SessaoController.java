@@ -76,7 +76,18 @@ public class SessaoController {
 		return modelAndView;
 	}
 	
-	
+	@Transactional
+	@GetMapping("admin/sessao/precos")
+	public ModelAndView atualizaPrecos() {
+		List<Sessao> sessoes = sessaoDao.lista();
+		
+		sessoes.forEach(sessao -> {
+			sessao.atualizaPreco();
+			sessaoDao.atualiza(sessao);
+		});
+		
+		return new ModelAndView("redirect:/");
+	}
 	
 	
 

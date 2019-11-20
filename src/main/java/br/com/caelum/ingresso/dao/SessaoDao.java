@@ -26,6 +26,16 @@ public class SessaoDao {
 		query.setParameter("salaParam", sala);
 		return query.getResultList();
 	}
+
+	public List<Sessao> lista() {
+		String sql = "select s from Sessao s";
+		Query query = manager.createQuery(sql, Sessao.class);
+		return query.getResultList();		
+	}
+
+	public void atualiza(Sessao sessao) {
+		manager.merge(sessao);
+	}
 	
 	
 }

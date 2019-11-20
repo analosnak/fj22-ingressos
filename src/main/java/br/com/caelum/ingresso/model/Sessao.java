@@ -67,6 +67,10 @@ public class Sessao {
 	public void setPreco(BigDecimal preco) {
 		this.preco = preco;
 	}
+
+	public void atualizaPreco() {
+		this.preco = sala.getPreco().add(filme.getPreco());
+	}
 	
 	
 }
