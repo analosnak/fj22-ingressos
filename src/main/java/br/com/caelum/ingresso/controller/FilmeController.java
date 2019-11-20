@@ -1,12 +1,17 @@
 package br.com.caelum.ingresso.controller;
 
 import br.com.caelum.ingresso.dao.FilmeDao;
+import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.DetalhesDoFilme;
 import br.com.caelum.ingresso.model.Filme;
+import br.com.caelum.ingresso.services.OmdbClient;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -21,6 +26,10 @@ public class FilmeController {
 
     @Autowired
     private FilmeDao filmeDao;
+    @Autowired
+    private SessaoDao sessaoDao;
+    @Autowired
+    private OmdbClient client;
 
 
     @GetMapping({"/admin/filme", "/admin/filme/{id}"})
@@ -71,5 +80,34 @@ public class FilmeController {
     public void delete(@PathVariable("id") Integer id){
         filmeDao.delete(id);
     }
+    
+    @GetMapping("filme/em-cartaz")
+    public ModelAndView emCartaz() {
+    	ModelAndView modelAndView = new ModelAndView("filme/em-cartaz");
+    	modelAndView.addObject("filmes", filmeDao.findAll());
+    	
+    	return modelAndView;
+    }
 
+    @GetMapping("filme/{id}/detalhe")
+    public ModelAndView detalhe(@PathVariable("id")  Integer id) {
+    	ModelAndView modelAndView = new ModelAndView("filme/detalhe");
+    	    	
+    	Filme filme = filmeDao.findOne(id);
+
+    	Optional<DetalhesDoFilme> optional = client.fazRequisicao(filme);
+    	
+    	DetalhesDoFilme padrao = new DetalhesDoFilme();
+    	padrao.setTitulo("Sem Filme");
+    	padrao.setAno("1900");
+    	
+		DetalhesDoFilme detalhesDoFilme = optional.orElse(padrao);
+    
+    	
+    	modelAndView.addObject("sessoes", sessaoDao.buscaSessoesDoFilme(filme));
+    	modelAndView.addObject("detalhes", detalhesDoFilme);
+    	
+    	return modelAndView;
+    }
+    
 }
