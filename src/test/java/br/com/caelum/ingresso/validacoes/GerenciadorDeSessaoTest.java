@@ -1,5 +1,6 @@
 package br.com.caelum.ingresso.validacoes;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
@@ -23,8 +24,8 @@ public class GerenciadorDeSessaoTest {
 	
 	@Before
 	public void modeloDeCenario() {
-		sala = new Sala("Sala 1");
-		filme = new Filme("Joker", Duration.ofMinutes(120), "SCI-FI");
+		sala = new Sala("Sala 1", BigDecimal.ZERO);
+		filme = new Filme("Joker", Duration.ofMinutes(120), "SCI-FI", BigDecimal.ZERO);
 		horario = LocalTime.parse("20:00:00");
 		sessao = new Sessao(sala, filme, horario);
 	}
