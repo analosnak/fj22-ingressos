@@ -35,7 +35,9 @@ public class SessaoDao {
 		return query.getResultList();
 	}
 	
-	
+	public Sessao findOne(Integer id) {
+		return manager.find(Sessao.class, id);
+	}
 	
 	
 	
@@ -54,4 +56,5 @@ public class SessaoDao {
 	public void atualiza(Sessao sessao) {
 		manager.merge(sessao);
 	}
+
 }

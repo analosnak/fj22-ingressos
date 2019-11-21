@@ -1,6 +1,7 @@
 package br.com.caelum.ingresso.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,10 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.dao.SalaDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
+import br.com.caelum.ingresso.model.DetalhesDoFilme;
 import br.com.caelum.ingresso.model.Filme;
+import br.com.caelum.ingresso.model.ImagemTop;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.services.OmdbClient;
 import br.com.caelum.ingresso.validacoes.GerenciadorDeSessao;
 
 @Controller
@@ -30,6 +35,8 @@ public class SessaoController {
 	private SalaDao salaDao;
 	@Autowired
 	private SessaoDao sessaoDao;
+	@Autowired
+	private OmdbClient omdbClient;
 	
 	@GetMapping("admin/sessao")
 	public ModelAndView form(@RequestParam("salaId") Integer idSala,
@@ -75,6 +82,27 @@ public class SessaoController {
 
 		return modelAndView;
 	}
+	
+	@GetMapping("sessao/{id}/lugares")
+	public ModelAndView lugares(@PathVariable("id") Integer id) {
+		ModelAndView modelAndView = new ModelAndView("sessao/lugares");
+		
+		Sessao sessao = sessaoDao.findOne(id);
+		modelAndView.addObject("sessao", sessao);
+		
+		Optional<ImagemTop> optional = 
+				omdbClient.fazRequisicao(sessao.getFilme(), ImagemTop.class);
+		
+		ImagemTop imagem = optional.orElse(new ImagemTop());
+		
+		
+		modelAndView.addObject("imagemCapa", imagem);
+		
+		return modelAndView;
+	}
+	
+	
+	
 	
 	@Transactional
 	@GetMapping("admin/sessao/precos")
