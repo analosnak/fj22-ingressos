@@ -1,7 +1,10 @@
 package br.com.caelum.ingresso.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -18,11 +21,16 @@ import org.springframework.web.servlet.ModelAndView;
 import br.com.caelum.ingresso.dao.FilmeDao;
 import br.com.caelum.ingresso.dao.SalaDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
-import br.com.caelum.ingresso.model.DetalhesDoFilme;
 import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.ImagemTop;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
+import br.com.caelum.ingresso.model.TipoDeIngresso;
+import br.com.caelum.ingresso.model.descontos.Descontao;
+import br.com.caelum.ingresso.model.descontos.DescontoFuncionario;
+import br.com.caelum.ingresso.model.descontos.DescontoIdoso;
+import br.com.caelum.ingresso.model.descontos.DescontoMeia;
+import br.com.caelum.ingresso.model.descontos.SemDesconto;
 import br.com.caelum.ingresso.model.form.SessaoForm;
 import br.com.caelum.ingresso.services.OmdbClient;
 import br.com.caelum.ingresso.validacoes.GerenciadorDeSessao;
@@ -95,8 +103,8 @@ public class SessaoController {
 		
 		ImagemTop imagem = optional.orElse(new ImagemTop());
 		
-		
 		modelAndView.addObject("imagemCapa", imagem);
+		modelAndView.addObject("tiposDeIngressos", TipoDeIngresso.values());
 		
 		return modelAndView;
 	}

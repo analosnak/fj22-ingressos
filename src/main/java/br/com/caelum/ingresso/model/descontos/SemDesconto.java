@@ -9,4 +9,9 @@ public class SemDesconto implements Descontao {
 		return preco;
 	}
 
+	@Override
+	public String getDescricao() {
+		return "INTEIRA";
+	}
+
 }

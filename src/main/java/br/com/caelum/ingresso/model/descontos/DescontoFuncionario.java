@@ -9,4 +9,9 @@ public class DescontoFuncionario implements Descontao {
 		return BigDecimal.ZERO;
 	}
 
+	@Override
+	public String getDescricao() {
+		return "FUNCIONARIO";
+	}
+
 }

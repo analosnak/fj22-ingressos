@@ -7,4 +7,9 @@ public class DescontoMeia implements Descontao {
 	public BigDecimal aplicaDesconto(BigDecimal preco) {
 		return preco.divide(new BigDecimal("2.0"));
 	}
+
+	@Override
+	public String getDescricao() {
+		return "MEIA";
+	}
 }
