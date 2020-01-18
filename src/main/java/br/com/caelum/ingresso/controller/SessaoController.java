@@ -22,6 +22,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessoes;
 
 @Controller
 public class SessaoController {
@@ -31,37 +32,42 @@ public class SessaoController {
 	private SalaDao salaDao;
 	@Autowired
 	private SessaoDao sessaoDao;
-	
+
 	@GetMapping("admin/sessao")
-	public ModelAndView form(@RequestParam("salaId") Integer idSala,
-								SessaoForm sessaoForm) {
+	public ModelAndView form(@RequestParam("salaId") Integer idSala, SessaoForm sessaoForm) {
 		ModelAndView modelAndView = new ModelAndView("sessao/sessao");
 
 		Sala sala = salaDao.findOne(idSala);
 		modelAndView.addObject("sala", sala);
-		
+
 		List<Filme> filmes = filmeDao.findAll();
 		modelAndView.addObject("filmes", filmes);
-		
+
 		modelAndView.addObject("form", sessaoForm);
-		
+
 		return modelAndView;
 	}
-	
+
 	@Transactional
 	@PostMapping("admin/sessao")
-	public ModelAndView salva(@Valid SessaoForm sessaoForm,
-			BindingResult result) {
+	public ModelAndView salva(@Valid SessaoForm sessaoForm, BindingResult result) {
 		if (result.hasErrors()) {
 			return form(sessaoForm.getSalaId(), sessaoForm);
 		}
-		
+
 		Sessao sessao = sessaoForm.toSessao(filmeDao, salaDao);
+
+		List<Sessao> sessoesDaSala = sessaoDao.buscaSessoesDaSala(sessaoForm.getSalaId());
 		
-		sessaoDao.salva(sessao);
-		
-		return new ModelAndView("redirect:/admin/sala/" + sessaoForm.getSalaId()
-		+ "/sessoes");
+		// valida sessao na sala
+		GerenciadorDeSessoes gds = new GerenciadorDeSessoes(sessoesDaSala);
+		if (gds.cabe(sessao)) {
+			sessaoDao.salva(sessao);
+
+			return new ModelAndView("redirect:/admin/sala/" + sessaoForm.getSalaId() + "/sessoes");
+		} else {
+			return form(sessaoForm.getSalaId(), sessaoForm);
+		}
 	}
 
 }
