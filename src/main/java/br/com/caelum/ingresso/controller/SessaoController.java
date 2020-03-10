@@ -20,6 +20,7 @@ import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessoes;
 
 @Controller
 public class SessaoController {
@@ -29,6 +30,8 @@ public class SessaoController {
 	private SalaDao salaDao;
 	@Autowired
 	private SessaoDao sessaoDao;
+	@Autowired
+	private GerenciadorDeSessoes gds;
 
 	@GetMapping("admin/sessao")
 	public ModelAndView form(@RequestParam("salaId") Integer idSala, SessaoForm sessaoForm) {
@@ -57,6 +60,12 @@ public class SessaoController {
 		
 		// pegar dados da requisição e popular sessao
 		Sessao sessao = sessaoForm.toSessao(salaDao, filmeDao);
+		
+		// validar horario da sessao
+		List<Sessao> sessoesDaSala = sessaoDao.listaSessoesDaSala(sessaoForm.getSalaId());
+		if (! gds.cabe(sessao, sessoesDaSala)) {
+			return form(sessaoForm.getSalaId(), sessaoForm);
+		}
 		
 		// salva sessao no banco de dados
 		sessaoDao.salva(sessao);
