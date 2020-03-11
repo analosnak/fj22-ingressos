@@ -2,11 +2,11 @@ package br.com.caelum.ingresso.desconto;
 
 import java.math.BigDecimal;
 
-public class ClienteEstudante implements Cliente {
+public class SemDesconto implements Desconto {
 
 	@Override
 	public BigDecimal descontaValor(BigDecimal precoOriginal) {
-		return precoOriginal.divide(new BigDecimal("2.0"));
+		return precoOriginal;
 	}
 
 }

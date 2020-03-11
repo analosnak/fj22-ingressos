@@ -2,13 +2,13 @@ package br.com.caelum.ingresso.model;
 
 import java.math.BigDecimal;
 
-import br.com.caelum.ingresso.desconto.Cliente;
+import br.com.caelum.ingresso.desconto.Desconto;
 
 public class Ingresso {
 	private Sessao sessao;
 	private BigDecimal preco;
 
-	public Ingresso(Sessao sessao, Cliente cliente) {
+	public Ingresso(Sessao sessao, Desconto cliente) {
 		this.sessao = sessao;
 		this.preco = cliente.descontaValor(sessao.getPreco());
 	}
