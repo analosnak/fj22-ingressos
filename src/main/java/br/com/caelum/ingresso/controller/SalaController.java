@@ -63,7 +63,7 @@ public class SalaController {
         ModelAndView modelAndView = new ModelAndView("sala/lista");
 
         modelAndView.addObject("salas", salaDao.findAll());
-
+        
         return modelAndView;
     }
 
