@@ -1,6 +1,7 @@
 package br.com.caelum.ingresso.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import br.com.caelum.ingresso.desconto.Desconto;
 
@@ -22,7 +23,7 @@ public class Ingresso {
 	}
 
 	public BigDecimal getPreco() {
-		return preco;
+		return preco.setScale(2, RoundingMode.HALF_UP);
 	}
 
 	public void setPreco(BigDecimal preco) {
