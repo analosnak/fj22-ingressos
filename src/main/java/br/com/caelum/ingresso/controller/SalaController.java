@@ -77,7 +77,7 @@ public class SalaController {
         view.addObject("sala", sala);
         
         //disponibilizar lista de sessoes
-        List<Sessao> sessoesDaSala = sessaoDao.listaSessoesDaSala(sala.getId());
+        List<Sessao> sessoesDaSala = sessaoDao.listaSessoesDaSala(sala);
         view.addObject("sessoes", sessoesDaSala);
 
         return view;

@@ -62,7 +62,7 @@ public class SessaoController {
 		Sessao sessao = sessaoForm.toSessao(salaDao, filmeDao);
 		
 		// validar horario da sessao
-		List<Sessao> sessoesDaSala = sessaoDao.listaSessoesDaSala(sessaoForm.getSalaId());
+		List<Sessao> sessoesDaSala = sessaoDao.listaSessoesDaSala(sessao.getSala());
 		if (! gds.cabe(sessao, sessoesDaSala)) {
 			return form(sessaoForm.getSalaId(), sessaoForm);
 		}
